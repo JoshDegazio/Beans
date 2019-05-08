@@ -1,0 +1,4 @@
+00182685,Josh,Degazio,jdegazio@outlook.com,Niagara,08/23/2001,Coding,0.6
+00344410,Kyle,Campbell,kcampbell73@hotmail.com,Durham,01/15/2001,Home Building,1
+00312576,David,Laughton,dlaughton11@hotmail.com,Bluewater,01/01/2002,Coding,1
+00181014,Matthew,Joiner,CalfWally77@outlook.com,Huron,10/18/2001,Floristry,0.1

@@ -79,6 +79,7 @@ namespace S22Terminal
             string tempCompetition;
             double tempScore;
             bool doesCompetitionExist = false;
+            bool doesSchoolBoardExist = false;
 
             Console.Clear();
 
@@ -88,7 +89,7 @@ namespace S22Terminal
             Console.WriteLine("Enter Contestant ID: ");
             Console.ReadLine();
             tempId = Console.ReadLine();
-            foreach(Contestant c in contestants)
+            foreach (Contestant c in contestants)
             {
                 if (tempId == c.allInfo[0].ToString())
                 {
@@ -121,12 +122,16 @@ namespace S22Terminal
             tempSchoolDistrict = Console.ReadLine();
             for (int i = 0; i < schoolBoards.Length; i++)
             {
-                if (tempSchoolDistrict != schoolBoards[i])
+                if (tempSchoolDistrict == schoolBoards[i])
                 {
-                    Console.WriteLine("The school board is not included in the program. Press any key to return to the mainmenu");
-                    Console.ReadKey();
-                    competitionManagement();
+                    doesSchoolBoardExist = true;
                 }
+            }
+            if (doesSchoolBoardExist == false)
+            {
+                Console.WriteLine("The school board is not included in the program. Press any key to return to the mainmenu");
+                Console.ReadKey();
+                competitionManagement();
             }
 
             Console.WriteLine("");
@@ -147,7 +152,7 @@ namespace S22Terminal
             {
                 competitions.Add(tempCompetition);
             }
-            
+
 
             Console.WriteLine("");
             Console.WriteLine("Enter Contestant Score: ");
@@ -198,7 +203,7 @@ namespace S22Terminal
             {
 
                 Console.WriteLine("");
-                Console.WriteLine("Are you sure you want to remove " + tempContestantInfo[1] + " " + tempContestantInfo[2] + " as a contestant?" );
+                Console.WriteLine("Are you sure you want to remove " + tempContestantInfo[1] + " " + tempContestantInfo[2] + " as a contestant?");
                 Console.WriteLine("1. Yes");
                 Console.WriteLine("2. No");
                 input = Console.Read();
@@ -234,6 +239,7 @@ namespace S22Terminal
         {
             string tempLastName = "";
             string[] tempContestantInfo = new string[8];
+            double tempScore;
             input = 0;
 
             Console.Clear();
@@ -250,6 +256,7 @@ namespace S22Terminal
                 tempContestantInfo = contestants[i].allInfo.Split(',');
                 if (tempContestantInfo[2] == tempLastName)
                 {
+                    double.TryParse(tempContestantInfo[7], out tempScore);
                     Console.WriteLine("");
                     Console.WriteLine("ID: " + tempContestantInfo[0]);
                     Console.WriteLine("First Name: " + tempContestantInfo[1]);
@@ -258,11 +265,11 @@ namespace S22Terminal
                     Console.WriteLine("School District: " + tempContestantInfo[4]);
                     Console.WriteLine("Birthday: " + tempContestantInfo[5]);
                     Console.WriteLine("Competition: " + tempContestantInfo[6]);
-                    Console.WriteLine("Score: %" + tempContestantInfo[7] + "00");
+                    Console.WriteLine("Score: " + (tempScore*100).ToString() + "%");
                     Console.ReadKey();
                 }
             }
-        
+
             competitionManagement();
 
         }
@@ -270,6 +277,7 @@ namespace S22Terminal
         private static void allContestants()
         {
             string[] tempContestantInfo = new string[8];
+            double tempScore;
             input = 0;
             Console.Clear();
 
@@ -279,9 +287,21 @@ namespace S22Terminal
             IEnumerable<Contestant> query = contestants.OrderBy(Contestant => Contestant.lastName).ThenBy(Contestant => Contestant.firstName);
             foreach (Contestant contestant in query)
             {
-                Console.WriteLine(contestant.allInfo);
+                tempContestantInfo = contestant.allInfo.Split(',');
+                double.TryParse(tempContestantInfo[7], out tempScore);
+                Console.WriteLine("ID: " + tempContestantInfo[0]);
+                Console.Write("First Name: " + tempContestantInfo[1]);
+                Console.Write(", Last Name: " + tempContestantInfo[2]);
+                Console.Write(", Email: " + tempContestantInfo[3]);
+                Console.WriteLine(", School District: " + tempContestantInfo[4]);
+                Console.Write("Birthday: " + tempContestantInfo[5]);
+                Console.Write(", Competition: " + tempContestantInfo[6]);
+                Console.WriteLine(", Score: " + (tempScore*100).ToString() + "%");
+                Console.WriteLine("");
             }
             Console.ReadKey();
+            Console.ReadLine();
+            competitionManagement();
         }
 
         private static void help()
@@ -292,7 +312,11 @@ namespace S22Terminal
             Console.WriteLine("Use digits and the enter key to navigate menus.");
             Console.WriteLine("Press enter to return to the mainmenu.");
             Console.ReadKey();
+            Console.ReadLine();
+
+            competitionManagement();
         }
+
         private static void topContestants()
         {
             int i = 0;
@@ -330,7 +354,7 @@ namespace S22Terminal
                     {
                         tempString = streamReader.ReadLine().Split(',');
                         double.TryParse(tempString[7], out tempScore);
-                        Contestant contestant = 
+                        Contestant contestant =
                             new Contestant(tempString[0], tempString[1], tempString[2], tempString[3],
                             tempString[4], tempString[5], tempString[6], tempScore);
                         contestants.Add(contestant);
@@ -338,7 +362,7 @@ namespace S22Terminal
                     streamReader.Close();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
                 Console.ReadKey();
@@ -373,7 +397,7 @@ namespace S22Terminal
         {
             get
             {
-                return id + "," + firstName + "," + lastName + "," + emailAddress + "," 
+                return id + "," + firstName + "," + lastName + "," + emailAddress + ","
                     + schoolDistrict + "," + birthday + "," + competition + "," + score.ToString();
             }
         }
